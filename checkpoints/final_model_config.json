@@ -1,0 +1,10 @@
+{
+  "hidden_size": 300,
+  "depth": 6,
+  "dropout": 0.1,
+  "ffn_hidden": 256,
+  "extra_dim": 13,
+  "global_dim": 1,
+  "num_tasks": 1,
+  "aggregation": "mean"
+}
