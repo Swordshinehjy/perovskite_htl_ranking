@@ -51,7 +51,7 @@ class HTLRankingModel(nn.Module):
     """
     Architecture:
         SMILES  ──► D-MPNN ──► mol_emb [H]
-                                        ├─ cat ──► FFN ──► [score_e, score_h]
+                                        ├─ cat ──► FFN ──► [score_PCE]
         extra_features [E] ─────────────┤
         global_features [G] ────────────┘
 
