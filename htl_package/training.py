@@ -310,16 +310,24 @@ def train(
             for k, v in agg_metrics.items():
                 logger.info(f"  {k:35s}: {v:.4f}")
 
-            # Save the model from the last fold as representative
-            save_checkpoint(cfg.save_dir, fold_results[-1]["model"],
-                            fold_results[-1]["scaler"], mcfg, "best_model")
+            # Save the model from the best fold (lowest val_loss) as representative
+            best_fold_idx = min(
+                range(len(fold_results)),
+                key=lambda i: min(fold_results[i]["history"]["val_loss"]),
+            )
+            logger.info(
+                f"  Best fold: {best_fold_idx} "
+                f"(val_loss={min(fold_results[best_fold_idx]['history']['val_loss']):.4f})"
+            )
+            save_checkpoint(cfg.save_dir, fold_results[best_fold_idx]["model"],
+                            fold_results[best_fold_idx]["scaler"], mcfg, "best_model")
 
         return {
             "test_metrics": agg_metrics if fold_metrics else {},
             "cv_fold_metrics": fold_metrics,
-            "history": fold_results[-1]["history"] if fold_results else {},
-            "model": fold_results[-1]["model"] if fold_results else None,
-            "scaler": fold_results[-1]["scaler"] if fold_results else None,
+            "history": fold_results[best_fold_idx]["history"] if fold_results else {},
+            "model": fold_results[best_fold_idx]["model"] if fold_results else None,
+            "scaler": fold_results[best_fold_idx]["scaler"] if fold_results else None,
             "checkpoint_dir": cfg.save_dir,
             "checkpoint_name": "best_model",
         }

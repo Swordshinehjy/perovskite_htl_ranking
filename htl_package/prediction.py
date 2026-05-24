@@ -119,20 +119,23 @@ def predict_batch(
     )
 
     all_s1, all_s2 = [], []
-    for i in range(len(valid)):
-        mol1 = valid["mol_1"].iloc[i]
-        mol2 = valid["mol_2"].iloc[i]
-        mg1 = BatchMolGraph([featurizer(mol1)])
-        mg2 = BatchMolGraph([featurizer(mol2)])
-        t1 = torch.tensor(ef1[i:i + 1], dtype=torch.float32).to(DEVICE)
-        t2 = torch.tensor(ef2[i:i + 1], dtype=torch.float32).to(DEVICE)
-        gf_t = torch.tensor(gf[i:i + 1], dtype=torch.float32).to(DEVICE)
-        s1, s2 = model(mg1, t1, mg2, t2, gf_t)
-        all_s1.append(s1.cpu().numpy()[0])
-        all_s2.append(s2.cpu().numpy()[0])
+    batch_size = 32
+    n = len(valid)
+    for start in range(0, n, batch_size):
+        end = min(start + batch_size, n)
+        batch_idx = list(range(start, end))
 
-    S1 = np.array(all_s1)
-    S2 = np.array(all_s2)
+        mg1 = BatchMolGraph([featurizer(valid["mol_1"].iloc[i]) for i in batch_idx])
+        mg2 = BatchMolGraph([featurizer(valid["mol_2"].iloc[i]) for i in batch_idx])
+        t1 = torch.tensor(ef1[start:end], dtype=torch.float32).to(DEVICE)
+        t2 = torch.tensor(ef2[start:end], dtype=torch.float32).to(DEVICE)
+        gf_t = torch.tensor(gf[start:end], dtype=torch.float32).to(DEVICE)
+        s1, s2 = model(mg1, t1, mg2, t2, gf_t)
+        all_s1.append(s1.cpu().numpy())
+        all_s2.append(s2.cpu().numpy())
+
+    S1 = np.concatenate(all_s1, axis=0)
+    S2 = np.concatenate(all_s2, axis=0)
 
     for i, n in enumerate(TASK_NAMES):
         valid[f"score_{n}_1"] = S1[:, i]
