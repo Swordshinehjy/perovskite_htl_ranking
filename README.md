@@ -1,6 +1,6 @@
 # Perovskite HTL Prediction — Pairwise Ranking via D-MPNN
 
-This repository contains the code for the paper "[Semi-rigid hole-selective self-assembled monolayers for inverted perovskite solar cells](https://doi.org/)". The code is written in Python and uses the chemprop library for deep learning. This work implements a perovskite hole transport layer (HTL) performance prediction and ranking system based on chemprop v2 D-MPNN molecular encoding + pairwise ranking loss (Margin Ranking + Delta Regression).
+This repository contains the code for the paper "[Machine-Learning-Guided Design of Semirigid Hole-Selective Self-Assembled Monolayers for High-Efficiency and Stable Perovskite Solar Cells](https://doi.org/)". The code is written in Python and uses the chemprop library for deep learning. This work implements a perovskite hole transport layer (HTL) performance prediction and ranking system based on chemprop v2 D-MPNN molecular encoding + pairwise ranking loss (Margin Ranking + Delta Regression).
 
 ![Descriptor](assets/descriptor.png)
 
@@ -143,4 +143,9 @@ global_features [G] ─────────┘
 | `SMILES`     | SMILES string                             |
 | `Alkyl` etc. | Additional molecular features (no suffix) |
 | `MO_ITO`     | Global feature                            |
+
+### Calculation
+
+All the structures were calculated at the B3LYP-D3(BJ)/def2-SVP level.
+
 
