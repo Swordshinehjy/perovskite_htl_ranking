@@ -157,4 +157,5 @@ global_features [G] ─────────┘
 
 All the structures were calculated at the B3LYP-D3(BJ)/def2-SVP level.
 
-
+### Data Collection and Deduplication
+Data were extracted from the literature (including SI), and the itertools.combinations algorithm was used to pair molecules sharing the same DOI. Subsequently, rows involving self-excess conflicts were removed. The remaining rows were examined for reverse-twin or identical-duplicate entries. Pairs with conflicting delta_PCE signs were entirely discarded, while for pairs with identical delta_PCE signs, only one instance was retained.
