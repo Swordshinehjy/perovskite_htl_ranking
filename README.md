@@ -121,11 +121,27 @@ python htl_ranking.py --mode diff_attr \
 
 ## Model Architecture
 
-```
-SMILES ──► D-MPNN ──► mol_emb [H]
-                              ├─ cat ──► FFN ──► [score_PCE]
-extra_features [E] ──────────┤
-global_features [G] ─────────┘
+```mermaid
+flowchart LR
+    smi["SMILES"] --> dmpnn["D-MPNN"]
+    dmpnn --> emb["mol_emb<br/>[H]"]
+    extra["extra_features<br/>[E]"]
+    glob["global_features<br/>[G]"]
+    emb --> cat{"concat"}
+    extra --> cat
+    glob --> cat
+    cat --> ffn["FFN"]
+    ffn --> score["score_PCE"]
+
+    classDef input  fill:#e8f4ff,stroke:#4a90d9,color:#1a1a1a;
+    classDef model  fill:#fff3e0,stroke:#e08e3c,color:#1a1a1a;
+    classDef feat   fill:#eefbe8,stroke:#5aa843,color:#1a1a1a;
+    classDef out    fill:#fdeaf1,stroke:#d95b8c,color:#1a1a1a;
+
+    class smi input;
+    class dmpnn,ffn model;
+    class emb,extra,glob,cat feat;
+    class score out;
 ```
 
 - **D-MPNN Encoder**: Based on chemprop v2 BondMessagePassing, supports mean/sum/norm aggregation
